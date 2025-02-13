@@ -48,9 +48,11 @@ func (zc *IPv6ZoneCache) Update(ift []net.Interface, force bool) (updated bool) 
 	zc.toIndex = make(map[string]int, len(ift))
 	zc.toName = make(map[int]string, len(ift))
 	for _, ifi := range ift {
-		zc.toIndex[ifi.Name] = ifi.Index
-		if _, ok := zc.toName[ifi.Index]; !ok {
-			zc.toName[ifi.Index] = ifi.Name
+		if ifi.Name != "" {
+			zc.toIndex[ifi.Name] = ifi.Index
+			if _, ok := zc.toName[ifi.Index]; !ok {
+				zc.toName[ifi.Index] = ifi.Name
+			}
 		}
 	}
 	return true
