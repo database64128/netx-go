@@ -63,6 +63,10 @@ func (zc *IPv6ZoneCache) Name(index int) string {
 	if index == 0 {
 		return ""
 	}
+	return zc.name(index)
+}
+
+func (zc *IPv6ZoneCache) name(index int) string {
 	updated := ZoneCache.Update(nil, false)
 	ZoneCache.RLock()
 	name, ok := ZoneCache.toName[index]
@@ -84,6 +88,10 @@ func (zc *IPv6ZoneCache) Index(name string) int {
 	if name == "" {
 		return 0
 	}
+	return zc.index(name)
+}
+
+func (zc *IPv6ZoneCache) index(name string) int {
 	updated := ZoneCache.Update(nil, false)
 	ZoneCache.RLock()
 	index, ok := ZoneCache.toIndex[name]
