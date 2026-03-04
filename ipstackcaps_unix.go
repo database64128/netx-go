@@ -42,7 +42,13 @@ func probe() (p IPStackCapabilities) {
 		defer unix.Close(s)
 		_ = unix.SetsockoptInt(s, unix.IPPROTO_IPV6, unix.IPV6_V6ONLY, probes[i].value)
 		if err := unix.Bind(s, &probes[i].laddr); err != nil {
-			continue
+			// If the bind was denied by a security policy (BPF, seccomp,
+			// SELinux, etc.), the kernel still supports IPv6 — the socket
+			// was created and setsockopt succeeded. Only treat errors like
+			// EADDRNOTAVAIL as lack of support. See go.dev/issue/77430.
+			if err != unix.EPERM && err != unix.EACCES {
+				continue
+			}
 		}
 		if i == 0 {
 			p.IPv6Enabled = true
