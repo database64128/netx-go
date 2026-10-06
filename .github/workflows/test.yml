@@ -12,6 +12,9 @@ on:
       - 'README.md'
       - 'LICENSE'
 
+permissions:
+  contents: read
+
 jobs:
   test:
     name: Test
@@ -31,4 +34,4 @@ jobs:
           go-version: ${{ matrix.go-version }}
 
       - name: Test
-        run: go test -v
+        run: go test -v ./...
